@@ -1,0 +1,3118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Completo de Churrasco Brasileiro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f5f2;
+            color: #333;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            background-color: #fff;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        .header {
+            background-color: #8b2635;
+            padding: 20px 70px;
+            color: white;
+        }
+        .title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .content {
+            display: flex;
+            flex-grow: 1;
+            padding: 30px 70px;
+            overflow-y: auto;
+        }
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        .nav-btn {
+            background-color: #8b2635;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .nav-btn:hover {
+            background-color: #6a1e2a;
+        }
+        .nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .slide-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(139, 38, 53, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            z-index: 1000;
+        }
+        .toc {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none;
+        }
+        .toc-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #8b2635;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toc-item {
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .toc-item:hover {
+            background-color: #f8f5f2;
+        }
+        .toc-item.active {
+            background-color: #f39c12;
+            color: white;
+        }
+        .toc-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #8b2635;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #8b2635;
+            display: flex;
+            align-items: center;
+        }
+        .card-title i {
+            margin-right: 10px;
+            color: #f39c12;
+        }
+        .highlight {
+            color: #8b2635;
+            font-weight: 700;
+        }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .feature-icon {
+            color: #f39c12;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .feature-text {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        .image-container {
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .list-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .list-icon {
+            background-color: #f39c12;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .list-text {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        .two-column {
+            display: flex;
+            gap: 30px;
+        }
+        .column {
+            flex: 1;
+        }
+        .tag {
+            background-color: #f8f5f2;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .module-item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .module-icon {
+            background-color: #f39c12;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .module-content h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #8b2635;
+        }
+        .module-content p {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        .comparison {
+            display: flex;
+            gap: 30px;
+        }
+        .comparison-column {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .comparison-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #8b2635;
+            text-align: center;
+        }
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+        }
+        .step-number {
+            background-color: #f39c12;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-text {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        .temperature-zones {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .zone {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 0 5px;
+        }
+        .zone-high {
+            background-color: rgba(231, 76, 60, 0.2);
+            border: 2px solid #e74c3c;
+        }
+        .zone-medium {
+            background-color: rgba(243, 156, 18, 0.2);
+            border: 2px solid #f39c12;
+        }
+        .zone-low {
+            background-color: rgba(46, 204, 113, 0.2);
+            border: 2px solid #2ecc71;
+        }
+        .zone-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .zone-high .zone-title {
+            color: #e74c3c;
+        }
+        .zone-medium .zone-title {
+            color: #f39c12;
+        }
+        .zone-low .zone-title {
+            color: #2ecc71;
+        }
+        .zone-temp {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .zone-use {
+            font-size: 14px;
+        }
+        .cut-types {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .cut-type {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .cut-icon {
+            font-size: 36px;
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        .cut-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #8b2635;
+        }
+        .cut-description {
+            font-size: 16px;
+            line-height: 1.3;
+        }
+        .tips-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tips-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #8b2635;
+            display: flex;
+            align-items: center;
+        }
+        .tips-title i {
+            margin-right: 10px;
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .tip-item {
+            display: flex;
+            align-items: center;
+        }
+        .tip-icon {
+            color: #f39c12;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .tip-text {
+            font-size: 16px;
+            line-height: 1.3;
+        }
+        .errors-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .error-tag {
+            background-color: #f8f5f2;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .error-tag i {
+            color: #e74c3c;
+            margin-right: 8px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .menu-card {
+            background-color: #f8f5f2;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .menu-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #8b2635;
+        }
+        .menu-items {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+        }
+        .step-number {
+            background-color: #f39c12;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .step-text {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        .cover-slide {
+            background: url('https://picsum.photos/seed/brazilian-barbecue-grill-meats/1280/720.jpg') center/cover no-repeat;
+            position: relative;
+        }
+        .cover-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .cover-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .cover-subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #f39c12;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .accent {
+            color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Slide 1: Capa -->
+        <div class="slide cover-slide active" id="slide-1">
+            <div class="cover-overlay">
+                <h1 class="cover-title">Curso Completo de <span class="accent">Churrasco</span> Brasileiro</h1>
+                <p class="cover-subtitle">Da tradição à perfeição</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Estrutura do Curso -->
+        <div class="slide" id="slide-2">
+            <div class="header">
+                <h1 class="title">Estrutura do Curso</h1>
+            </div>
+            <div class="content">
+                <div class="module-list">
+                    <div class="module-item">
+                        <div class="module-icon">
+                            <i class="material-icons">history</i>
+                        </div>
+                        <div class="module-content">
+                            <h3>Módulo 1: Introdução ao Churrasco Brasileiro</h3>
+                            <p>História, tradições e importância cultural do churrasco no Brasil. Conheça as diferentes escolas e estilos regionais.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item">
+                        <div class="module-icon">
+                            <i class="material-icons">build</i>
+                        </div>
+                        <div class="module-content">
+                            <h3>Módulo 2: Equipamentos e Utensílios Essenciais</h3>
+                            <p>Churrasqueiras, espetos, facas, grelhas e ferramentas indispensáveis para o churrasco perfeito.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item">
+                        <div class="module-icon">
+                            <i class="material-icons">local_fire_department</i>
+                        </div>
+                        <div class="module-content">
+                            <h3>Módulo 3: Técnicas de Preparo</h3>
+                            <p>Assar vs grelhar, selamento, uso do sal, controle de temperatura e segredos para carnes suculentas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item">
+                        <div class="module-icon">
+                            <i class="material-icons">restaurant</i>
+                        </div>
+                        <div class="module-content">
+                            <h3>Módulo 4: Cortes de Carne</h3>
+                            <p>Picanha, costela, fraldinha, alcatra, maminha, contrafilé e outros cortes nobres e suas características.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item">
+                        <div class="module-icon">
+                            <i class="material-icons">set_meal</i>
+                        </div>
+                        <div class="module-content">
+                            <h3>Módulo 5: Acompanhamentos e Receitas</h3>
+                            <p>Pão de alho, vinagrete, farofa, saladas e molhos que complementam o churrasco brasileiro.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: O que você vai aprender -->
+        <div class="slide" id="slide-3">
+            <div class="header">
+                <h1 class="title">O que você vai aprender</h1>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="material-icons">local_fire_department</i>
+                            Técnicas Tradicionais
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Domine os métodos consagrados que tornam o churrasco brasileiro único</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Aprenda a controlar o fogo para diferentes tipos de carne</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Conheça a diferença entre assar e grelhar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="material-icons">restaurant</i>
+                            Cortes de Carne
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Identifique os melhores cortes e saiba como prepará-los</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Aprenda os tempos de cozimento ideais para cada corte</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Domine técnicas de selamento e uso correto do sal</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="material-icons">set_meal</i>
+                            Acompanhamentos
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Prepare os acompanhamentos clássicos do churrasco</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Aprenda receitas de pão de alho, vinagrete e farofas</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Descubra molhos e combinações que elevam seu churrasco</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="material-icons">build</i>
+                            Equipamentos
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Conheça os utensílios essenciais para o churrasco</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Escolha o tipo ideal de churrasqueira para suas necessidades</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Aprenda a manter seus equipamentos em perfeito estado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: História do Churrasco Brasileiro -->
+        <div class="slide" id="slide-4">
+            <div class="header">
+                <h1 class="title">História do Churrasco Brasileiro</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">public</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Origens</strong><br>
+                                Tradição começou com <span class="highlight">tropeiros</span> e peões no sul do Brasil, que assavam carnes no fogo de chão durante longas jornadas
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">restaurant</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Influências</strong><br>
+                                Fusão de técnicas <span class="highlight">indígenas</span> (fogo de chão) com tradições <span class="highlight">europeias</span> (assados e grelhados)
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">trending_up</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Expansão</strong><br>
+                                Dos <span class="highlight">pampas gaúchos</span> para todo o Brasil, tornando-se patrimônio cultural e identidade nacional
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">stars</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Símbolo Cultural</strong><br>
+                                Hoje, o churrasco representa <span class="highlight">encontro social</span>, celebração e hospitalidade brasileira
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/traditional-gaucho-bbq-brazilian-churrasco/600/400.jpg" alt="Churrasco tradicional gaúcho">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Tradições e Cultura do Churrasco -->
+        <div class="slide" id="slide-5">
+            <div class="header">
+                <h1 class="title">Tradições e Cultura do Churrasco</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">groups</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Evento Social</strong><br>
+                                Reúne <span class="highlight">família e amigos</span> em celebração de convivência e partilha
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">public</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Estilos Regionais</strong><br>
+                                <div class="cut-types">
+                                    <div class="cut-type">
+                                        <span class="tag">Gaúcho</span>
+                                        <span class="tag">Mineiro</span>
+                                        <span class="tag">Paulista</span>
+                                        <span class="tag">Cuiabano</span>
+                                        <span class="tag">Nordestino</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">person</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>O Churrasqueiro</strong><br>
+                                Figura <span class="highlight">central</span> que domina técnicas e é responsável pelo sucesso do evento
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">celebration</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Celebrações</strong><br>
+                                Presente em <span class="highlight">feriados</span>, finais de semana, eventos esportivos e comemorações
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/people-gathering-around-bbq-grill-brazilian-churrasco/600/400.jpg" alt="Pessoas reunidas em torno de uma churrasqueira">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Equipamentos Essenciais - Parte 1 -->
+        <div class="slide" id="slide-6">
+            <div class="header">
+                <h1 class="title">Equipamentos Essenciais - Parte 1</h1>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-skewers-meat-rods/600/300.jpg" alt="Espetos de churrasco">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">straighten</i>
+                            Espetos
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Disponíveis em diversos <span class="highlight">tamanhos e materiais</span> (aço inox, ferro)</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Essenciais para assar carnes em postas e para churrasco no espeto</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Escolha espetos com <span class="highlight">ponta dupla</span> para melhor fixação da carne</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-knives-set-cutting-meat/600/300.jpg" alt="Facas de churrasco">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">content_cut</i>
+                            Facas
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Conjunto com <span class="highlight">faca de churrasco</span> (corte preciso), faca de filetar (fina e flexível) e faca de cortar</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Indispensáveis para o preparo e corte das carnes</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Mantenha as facas sempre <span class="highlight">afiadas</span> e utilize uma tábua adequada</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-tongs-grilling-tools/600/300.jpg" alt="Pinças para churrasco">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">pan_tool</i>
+                            Pinças
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Indispensáveis para <span class="highlight">virar e manipular</span> as carnes na grelha sem perfurá-las</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Mantêm a suculência da carne durante o preparo</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Escolha pinças com <span class="highlight">cabos longos</span> e resistentes ao calor</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-meat-fork-testing-tool/600/300.jpg" alt="Garfos trinchantes">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">restaurant</i>
+                            Garfos Trinchantes
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Utilizados para <span class="highlight">verificar o ponto</span> da carne e para auxiliar no corte</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Ferramenta essencial para o churrasqueiro experiente</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Use o garfo com <span class="highlight">moderação</span> para não perfurar excessivamente a carne</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Equipamentos Essenciais - Parte 2 -->
+        <div class="slide" id="slide-7">
+            <div class="header">
+                <h1 class="title">Equipamentos Essenciais - Parte 2</h1>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-grill-racks-mesh/600/300.jpg" alt="Grelhas para churrasco">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">grid_on</i>
+                            Grelhas
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Disponíveis em diferentes <span class="highlight">materiais</span> (ferro fundido, aço inox) e formatos</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Essenciais para grelhar carnes e legumes</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Grelhas de <span class="highlight">ferro fundido</span> retêm melhor o calor e deixam marcas características</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/wooden-cutting-board-meat/600/300.jpg" alt="Tábua de corte">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">dashboard</i>
+                            Tábua de Corte
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Superfície <span class="highlight">higiênica e resistente</span> para cortar e servir as carnes</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Preferencialmente de madeira ou bambu</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Mantenha uma tábua <span class="highlight">exclusiva para carnes</span> e outra para vegetais</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-apron-chef-uniform/600/300.jpg" alt="Avental de churrasco">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">person</i>
+                            Avental
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Proteção <span class="highlight">essencial</span> para o churrasqueiro</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Deve ser resistente ao calor e com bolsos para utensílios</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Escolha modelos com <span class="highlight">tecidos grossos</span> como couro ou denim</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/charcoal-starter-fire-chimney/600/300.jpg" alt="Acendedor de carvão">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">local_fire_department</i>
+                            Acendedor de Carvão
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Ferramenta <span class="highlight">prática e segura</span> para iniciar o braseiro</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Evita o uso de produtos químicos</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dica
+                            </div>
+                            <p class="tip-text">Use jornal ou <span class="highlight">cubos de acendimento</span> na base para acender o carvão</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Tipos de Churrasqueiras -->
+        <div class="slide" id="slide-8">
+            <div class="header">
+                <h1 class="title">Tipos de Churrasqueiras</h1>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/brick-bbq-grill-alvenaria-traditional/600/300.jpg" alt="Churrasqueira de alvenaria">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">home</i>
+                            Churrasqueira de Alvenaria
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Modelo <span class="highlight">tradicional</span> e mais durável</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Mantém temperatura estável e distribui calor uniformemente</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Vantagens
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Durabilidade</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Retém calor</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Custo-benefício</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Personalizável</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/cast-iron-bbq-grill-portable/600/300.jpg" alt="Churrasqueira de ferro fundido">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">whatshot</i>
+                            Ferro Fundido
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Material <span class="highlight">excelente</span> para retenção de calor</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Ideal para quem busca sabor autêntico de churrasco</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Vantagens
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Aquece rápido</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Durável</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Fácil limpeza</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/gas-bbq-grill-modern-stainless/600/300.jpg" alt="Churrasqueira a gás">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">local_fire_department</i>
+                            Churrasqueira a Gás
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Opção <span class="highlight">prática</span> e rápida</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Permite controle preciso da temperatura</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Vantagens
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Praticidade</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Controle de temperatura</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Sem fumaça</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/portable-bbq-grill-picnic-foldable/600/300.jpg" alt="Churrasqueira portátil">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">luggage</i>
+                            Churrasqueira Portátil
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text"><span class="highlight">Compacta</span> e leve</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Perfeita para passeios, praia e eventos externos</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Vantagens
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Leve</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Fácil transporte</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Versátil</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/rotisserie-bbq-grill-spit-meat/600/300.jpg" alt="Churrasqueira com espeto giratório">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">rotate_right</i>
+                            Espeto Giratório
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Sistema com <span class="highlight">motor</span> que gira o espeto lentamente</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">check_circle</i>
+                            <p class="feature-text">Ideal para assar peças grandes de carne uniformemente</p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Vantagens
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Cozimento uniforme</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Para peças grandes</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Menos intervenção</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Técnicas de Preparo - Controle do Fogo -->
+        <div class="slide" id="slide-9">
+            <div class="header">
+                <h1 class="title">Técnicas de Preparo - Controle do Fogo</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">local_fire_department</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Combustíveis</strong><br>
+                                <span class="highlight">Carvão</span> - sabor autêntico<br>
+                                <span class="highlight">Lenha</span> - aroma marcante<br>
+                                <span class="highlight">Briquetes</span> - queima uniforme
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">whatshot</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Acendendo o Fogo</strong><br>
+                                Use <span class="highlight">acendedor de chaminé</span> ou cubos de acendimento. Evite produtos químicos que alteram o sabor da carne.
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">sync</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Braseiro Ideal</strong><br>
+                                Espere o carvão ficar <span class="highlight">cinza escuro</span> com camada branca. Distribua de forma uniforme para calor constante.
+                            </div>
+                        </div>
+                        
+                        <div class="temperature-zones">
+                            <div class="zone zone-high">
+                                <h3 class="zone-title">Alta</h3>
+                                <p class="zone-temp">250-300°C</p>
+                                <p class="zone-use">Selamento inicial</p>
+                            </div>
+                            <div class="zone zone-medium">
+                                <h3 class="zone-title">Média</h3>
+                                <p class="zone-temp">180-220°C</p>
+                                <p class="zone-use">Cozimento principal</p>
+                            </div>
+                            <div class="zone zone-low">
+                                <h3 class="zone-title">Baixa</h3>
+                                <p class="zone-temp">120-160°C</p>
+                                <p class="zone-use">Finalização e descanso</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/charcoal-bbq-fire-brisket-perfect-embers/600/300.jpg" alt="Braseiro bem formado">
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">height</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Posicionamento da Carne</strong><br>
+                                <span class="highlight">Perto do braseiro</span> (20-25cm) - para grelhar<br>
+                                <span class="highlight">Longe do braseiro</span> (40-50cm) - para assar<br>
+                                Ajuste a altura da grelha conforme necessidade
+                            </div>
+                        </div>
+                        
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/bbq-grill-temperature-zones-diagram-heat-control/600/300.jpg" alt="Diagrama de zonas de temperatura na churrasqueira">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Técnicas de Preparo - Assar vs Grelhar -->
+        <div class="slide" id="slide-10">
+            <div class="header">
+                <h1 class="title">Técnicas de Preparo - Assar vs Grelhar</h1>
+            </div>
+            <div class="content">
+                <div class="comparison">
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Grelhar</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/grilling-meat-on-bbq-grill-close-up/600/300.jpg" alt="Carne sendo grelhada">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">height</i>
+                            <p class="feature-text">
+                                <strong>Distância</strong><br>
+                                Carne <span class="highlight">próxima</span> do braseiro<br>
+                                <span class="highlight">20-25cm</span> de distância
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">whatshot</i>
+                            <p class="feature-text">
+                                <strong>Calor</strong><br>
+                                <span class="highlight">Intenso</span> e direto<br>
+                                Ideal para selar rapidamente
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">timer</i>
+                            <p class="feature-text">
+                                <strong>Tempo</strong><br>
+                                Cozimento <span class="highlight">rápido</span><br>
+                                Menor tempo de exposição ao calor
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Ideal para:
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Bifes finos</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Selamento</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Cortes macios</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Picanha</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Assar</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/roasting-meat-on-bbq-indirect-heat/600/300.jpg" alt="Carne sendo assada">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">height</i>
+                            <p class="feature-text">
+                                <strong>Distância</strong><br>
+                                Carne <span class="highlight">distante</span> do braseiro<br>
+                                <span class="highlight">40-50cm</span> de distância
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">whatshot</i>
+                            <p class="feature-text">
+                                <strong>Calor</strong><br>
+                                <span class="highlight">Suave</span> e indireto<br>
+                                Cozimento lento e uniforme
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">timer</i>
+                            <p class="feature-text">
+                                <strong>Tempo</strong><br>
+                                Cozimento <span class="highlight">lento</span><br>
+                                Maior tempo de exposição ao calor
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">thumb_up</i>
+                                Ideal para:
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Cortes grossos</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Costela</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Cupim</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Cozimento uniforme</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Técnicas de Preparo - Selamento da Carne -->
+        <div class="slide" id="slide-11">
+            <div class="header">
+                <h1 class="title">Técnicas de Preparo - Selamento da Carne</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">water_drop</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>O que é Selamento?</strong><br>
+                                Processo de <span class="highlight">fechar os poros</span> da carne para manter os sucos internos, preservando a suculência e o sabor.
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">priority_high</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Por que é Importante?</strong><br>
+                                Mantém a carne <span class="highlight">suculenta</span> e saborosa, evitando o ressecamento durante o cozimento.
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">visibility</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Momento Certo</strong><br>
+                                Quando a carne começa a <span class="highlight">soltar suco</span> na superfície. É o sinal de que está pronta para ser virada.
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">timer</i>
+                                Tempo de Selamento por Espessura
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">straighten</i>
+                                    <p class="tip-text"><strong>8 cm:</strong> 3 minutos</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">straighten</i>
+                                    <p class="tip-text"><strong>4-7 cm:</strong> 2 minutos</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">straighten</i>
+                                    <p class="tip-text"><strong>Bifes:</strong> 30 segundos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/meat-sealing-process-bbq-grilling-technique/600/300.jpg" alt="Processo de selamento da carne">
+                        </div>
+                        
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-text">
+                                    Posicione a carne <span class="highlight">próxima ao braseiro</span> (20-25cm) para receber calor intenso
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-text">
+                                    Aguarde o <span class="highlight">surgimento de gotas</span> de suco na superfície superior da carne
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-text">
+                                    Vire a carne e <span class="highlight">repita o processo</span> do outro lado
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-text">
+                                    Após selar ambos os lados, <span class="highlight">afaste do braseiro</span> (40-50cm) para finalizar o assamento
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Técnicas de Preparo - Uso do Sal -->
+        <div class="slide" id="slide-12">
+            <div class="header">
+                <h1 class="title">Técnicas de Preparo - Uso do Sal</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="cut-types">
+                            <div class="cut-type">
+                                <i class="material-icons cut-icon">grain</i>
+                                <h3 class="cut-name">Sal Grosso</h3>
+                                <p class="cut-description">Ideal para <span class="highlight">carnes bovinas</span>, não penetra profundamente</p>
+                            </div>
+                            <div class="cut-type">
+                                <i class="material-icons cut-icon">blur_on</i>
+                                <h3 class="cut-name">Sal Refinado</h3>
+                                <p class="cut-description">Perfeito para <span class="highlight">suínos e aves</span>, maior poder de penetração</p>
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">percent</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Quantidade Ideal</strong><br>
+                                Use <span class="highlight">2% do peso</span> da carne. É melhor colocar menos sal e corrigir depois, se necessário.
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">schedule</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Momento Certo</strong><br>
+                                <span class="highlight">Carnes bovinas:</span> salgar no momento de levar à churrasqueira<br>
+                                <span class="highlight">Suínos e aves:</span> salgar antes para permitir penetração
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/coarse-salt-application-on-brazilian-bbq-meat/600/300.jpg" alt="Aplicação correta do sal na carne">
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">warning</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Cuidados Importantes</strong><br>
+                                • Não salgue carnes bovinas com <span class="highlight">antecedência</span><br>
+                                • O sal <span class="highlight">desidrata</span> a carne se aplicado muito antes<br>
+                                • Evite usar sal refinado em carnes bovinas<br>
+                                • Nunca use sal marinho úmido em churrasco
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">psychology</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Segredo dos Mestres</strong><br>
+                                Para carnes bovinas, o ideal é salgar no momento de levar à churrasqueira e, se necessário, <span class="highlight">retocar o sal</span> durante o assamento.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Cortes de Carne - Picanha -->
+        <div class="slide" id="slide-13">
+            <div class="header">
+                <h1 class="title">Cortes de Carne - Picanha</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">info</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Características</strong><br>
+                                • Localizada na <span class="highlight">parte posterior</span> do boi<br>
+                                • Formato triangular com <span class="highlight">capa de gordura</span><br>
+                                • Textura macia e sabor acentuado<br>
+                                • Peso médio: 1,5 a 2,5 kg
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">shopping_cart</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Como Escolher</strong><br>
+                                • Cor <span class="highlight">vermelho-vivo</span> e brilhante<br>
+                                • Gordura de cor <span class="highlight">amarelo-clara</span><br>
+                                • Textura firme e elástica ao toque<br>
+                                • Capa de gordura uniforme (1-2 cm)
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">content_cut</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Corte Correto</strong><br>
+                                • Remover a <span class="highlight">película</span> da parte inferior<br>
+                                • Fatiar em <span class="highlight">sentido contrário</span> às fibras<br>
+                                • Espessura ideal: 2-3 cm<br>
+                                • Nunca remover a capa de gordura antes de assar
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas de Preparo
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">grain</i>
+                                    <p class="tip-text">Sal grosso</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">whatshot</i>
+                                    <p class="tip-text">Selar primeiro</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">height</i>
+                                    <p class="tip-text">Distância do braseiro</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">timer</i>
+                                    <p class="tip-text">Tempo controlado</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">restaurant</i>
+                                    <p class="tip-text">Descansar antes de fatiar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/picanha-whole-cut-brazilian-beef-rump-cap/600/300.jpg" alt="Picanha inteira">
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">outdoor_grill</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Técnicas de Preparo</strong><br>
+                                • <span class="highlight">Salgada a seco:</span> aplicar sal grosso no momento de levar ao fogo<br>
+                                • <span class="highlight">Assamento:</span> começar selando perto do braseiro e depois afastar<br>
+                                • <span class="highlight">Ponto ideal:</span> mal passada para manter a suculência<br>
+                                • <span class="highlight">Fatiar:</span> sempre após o descanso de 5-10 minutos
+                            </div>
+                        </div>
+                        
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/picanha-sliced-cooked-brazilian-bbq-meat/600/300.jpg" alt="Picanha fatiada corretamente">
+                        </div>
+                        
+                        <div class="temperature-zones">
+                            <div class="zone zone-high">
+                                <h3 class="zone-title">Mal Passada</h3>
+                                <p class="zone-temp">48-52°C</p>
+                                <p class="zone-use">Centro vermelho, suculenta</p>
+                            </div>
+                            <div class="zone zone-medium">
+                                <h3 class="zone-title">Ao Ponto</h3>
+                                <p class="zone-temp">55-60°C</p>
+                                <p class="zone-use">Centro rosado, equilibrada</p>
+                            </div>
+                            <div class="zone zone-well">
+                                <h3 class="zone-title">Bem Passada</h3>
+                                <p class="zone-temp">65°C+</p>
+                                <p class="zone-use">Centro marrom, mais seca</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Cortes de Carne - Costela -->
+        <div class="slide" id="slide-14">
+            <div class="header">
+                <h1 class="title">Cortes de Carne - Costela</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="cut-types">
+                            <div class="cut-type">
+                                <i class="material-icons cut-icon">pets</i>
+                                <h3 class="cut-name">Bovina</h3>
+                                <p class="cut-description">Fibras <span class="highlight">grossas</span>, cozimento lento</p>
+                            </div>
+                            <div class="cut-type">
+                                <i class="material-icons cut-icon">spa</i>
+                                <h3 class="cut-name">Suína</h3>
+                                <p class="cut-description">Mais <span class="highlight">macia</span>, sabor marcante</p>
+                            </div>
+                            <div class="cut-type">
+                                <i class="material-icons cut-icon">emoji_nature</i>
+                                <h3 class="cut-name">Cordeiro</h3>
+                                <p class="cut-description">Sabor <span class="highlight">intenso</span>, textura única</p>
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">info</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Características</strong><br>
+                                • Fibras <span class="highlight">grossas e compridas</span><br>
+                                • Presença de ossos e gordura<br>
+                                • Requer cozimento <span class="highlight">lento</span> e prolongado<br>
+                                • Ideal para assar em temperatura baixa
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">shopping_cart</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Como Escolher</strong><br>
+                                • Espessura <span class="highlight">uniforme</span><br>
+                                • Boa quantidade de carne entre os ossos<br>
+                                • Gordura bem distribuída (<span class="highlight">marmoreio</span>)<br>
+                                • Cor vermelha viva e brilhante
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/beef-ribs-on-grill-bbq-cooking/600/300.jpg" alt="Costela inteira na grelha">
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">thermostat</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Controle de Temperatura</strong><br>
+                                • Manter temperatura <span class="highlight">baixa e constante</span><br>
+                                • Ideal: 120-150°C<br>
+                                • Evitar chamas diretas<br>
+                                • Usar braseiro bem formado e cinzento
+                            </div>
+                        </div>
+                        
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/cooked-beef-ribs-ready-to-serve-bbq/600/300.jpg" alt="Costela pronta para servir">
+                        </div>
+                        
+                        <div class="done-signs">
+                            <div class="tips-title">
+                                <i class="material-icons">check_circle</i>
+                                Quando Está no Ponto
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">touch_app</i>
+                                    <p class="tip-text">Carne macia</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">vertical_split</i>
+                                    <p class="tip-text">Soltando do osso</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">opacity</i>
+                                    <p class="tip-text">Suculenta</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">colorize</i>
+                                    <p class="tip-text">Cor dourada</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">restaurant</i>
+                                    <p class="tip-text">Faca desliza facilmente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Cortes de Carne - Fraldinha e Alcatra -->
+        <div class="slide" id="slide-15">
+            <div class="header">
+                <h1 class="title">Cortes de Carne - Fraldinha e Alcatra</h1>
+            </div>
+            <div class="content">
+                <div class="comparison">
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Fraldinha</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/fraldinha-beef-cut-brazilian-bbq-meat/600/300.jpg" alt="Fraldinha inteira">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">place</i>
+                            <p class="feature-text">
+                                <strong>Localização</strong><br>
+                                Abdômen do boi, próxima ao filé
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">opacity</i>
+                            <p class="feature-text">
+                                <strong>Características</strong><br>
+                                Baixo teor de gordura, fibras longas, sabor suave
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">timer</i>
+                            <p class="feature-text">
+                                <strong>Cozimento</strong><br>
+                                Rápido, cerca de 15-20 minutos
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">thumb_up</i>
+                            <p class="feature-text">
+                                <strong>Ideal para</strong><br>
+                                Cortes finos, espetinhos, churrasco rápido
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">content_cut</i>
+                                    <p class="tip-text">Cortar contra fibras</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">grain</i>
+                                    <p class="tip-text">Sal grosso</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">whatshot</i>
+                                    <p class="tip-text">Grelha quente</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">local_fire_department</i>
+                                    <p class="tip-text">Selar rápido</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">restaurant_menu</i>
+                                    <p class="tip-text">Ao ponto</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Alcatra</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/alcatra-beef-cut-whole-piece-brazilian-bbq/600/300.jpg" alt="Alcatra inteira">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">place</i>
+                            <p class="feature-text">
+                                <strong>Localização</strong><br>
+                                Traseira do boi, composta por três cortes
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">category</i>
+                            <p class="feature-text">
+                                <strong>Partes</strong><br>
+                                Picanha, maminha e miolo de alcatra
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">star</i>
+                            <p class="feature-text">
+                                <strong>Miolo</strong><br>
+                                Saboroso, macio, menos gorduroso que a picanha
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">timer</i>
+                            <p class="feature-text">
+                                <strong>Cozimento</strong><br>
+                                Rápido, 10-15 minutos
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">content_cut</i>
+                                    <p class="tip-text">Cortar em bifes grossos</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">grain</i>
+                                    <p class="tip-text">Sal grosso e alho</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">local_wine</i>
+                                    <p class="tip-text">Opção: vinho tinto</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">whatshot</i>
+                                    <p class="tip-text">Grelha média</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">sync</i>
+                                    <p class="tip-text">Virar poucas vezes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Cortes de Carne - Maminha e Contrafilé -->
+        <div class="slide" id="slide-16">
+            <div class="header">
+                <h1 class="title">Cortes de Carne - Maminha e Contrafilé</h1>
+            </div>
+            <div class="content">
+                <div class="comparison">
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Maminha</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/maminha-beef-cut-brazilian-bbq-meat/600/300.jpg" alt="Maminha inteira">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">place</i>
+                            <p class="feature-text">
+                                <strong>Localização</strong><br>
+                                Parte traseira do boi, próxima à alcatra
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">opacity</i>
+                            <p class="feature-text">
+                                <strong>Características</strong><br>
+                                Alta concentração de gordura, sabor marcante
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">content_cut</i>
+                            <p class="feature-text">
+                                <strong>Corte Ideal</strong><br>
+                                Fatias finas no sentido contrário às fibras
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">thumb_up</i>
+                            <p class="feature-text">
+                                <strong>Ponto Ideal</strong><br>
+                                Ao ponto ou bem passada, conforme preferência
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">grain</i>
+                                    <p class="tip-text">Sal grosso</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">whatshot</i>
+                                    <p class="tip-text">Grelha média</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">sync</i>
+                                    <p class="tip-text">Virar poucas vezes</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">timer</i>
+                                    <p class="tip-text">15-20 minutos</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">restaurant_menu</i>
+                                    <p class="tip-text">Servir fatiada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Contrafilé</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/contrafile-beef-cut-brazilian-bbq-meat/600/300.jpg" alt="Contrafilé inteiro">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">place</i>
+                            <p class="feature-text">
+                                <strong>Localização</strong><br>
+                                Lombo do boi, junto ao filé mignon
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">texture</i>
+                            <p class="feature-text">
+                                <strong>Características</strong><br>
+                                Textura macia, sabor intenso, marmorizado
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">verified</i>
+                            <p class="feature-text">
+                                <strong>Qualidade</strong><br>
+                                Cor vermelho-viva, textura firme, nervo lateral
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">restaurant_menu</i>
+                            <p class="feature-text">
+                                <strong>Ponto Ideal</strong><br>
+                                Mal passada ou ao ponto, mantendo suculência
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">content_cut</i>
+                                    <p class="tip-text">Remover nervo lateral</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">grain</i>
+                                    <p class="tip-text">Sal grosso</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">whatshot</i>
+                                    <p class="tip-text">Selar rapidamente</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">eco</i>
+                                    <p class="tip-text">Opção: cebola roxa</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">timer</i>
+                                    <p class="tip-text">10-15 minutos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Outros Cortes e Aves -->
+        <div class="slide" id="slide-17">
+            <div class="header">
+                <h1 class="title">Outros Cortes e Aves</h1>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/filet-mignon-beef-tenderloin-bbq/600/300.jpg" alt="Filé mignon">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">restaurant</i>
+                            Filé Mignon
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">star</i>
+                            <p class="feature-text"><span class="highlight">Macio</span> e suculento</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">opacity</i>
+                            <p class="feature-text">Baixo teor de <span class="highlight">gordura</span></p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <p class="tip-text">Temperar com sal grosso e grelhar rapidamente. Servir com molho de ervas ou vinho tinto.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/chicken-wings-bbq-grilled-crispy-skin/600/300.jpg" alt="Asinhas de frango">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">lunch_dining</i>
+                            Asinhas de Frango
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">whatshot</i>
+                            <p class="feature-text"><span class="highlight">Versáteis</span> e saborosas</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">texture</i>
+                            <p class="feature-text">Pele <span class="highlight">crocante</span></p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <p class="tip-text">Marinar com temperos fortes. Assar em fogo médio até a pele ficar dourada e crocante.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/chicken-hearts-bbq-grilled-skewers/600/300.jpg" alt="Coração de frango">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">spa</i>
+                            Coração de Frango
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">eco</i>
+                            <p class="feature-text">Sabor <span class="highlight">intenso</span></p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">timer</i>
+                            <p class="feature-text">Cozimento <span class="highlight">rápido</span></p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <p class="tip-text">Limpar bem e marinar. Grelhar em espetos até ficar bem passado, quase torrado.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/chicken-thigh-bbq-grilled-juicy/600/300.jpg" alt="Sobrecoxa de frango">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">dinner_dining</i>
+                            Sobrecoxa de Frango
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">opacity</i>
+                            <p class="feature-text">Mais <span class="highlight">úmida</span> que o peito</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">texture</i>
+                            <p class="feature-text">Pele <span class="highlight">crocante</span></p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <p class="tip-text">Temperar com limão, alho e ervas. Assar até a pele ficar dourada e crocante.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/pork-loin-bbq-grilled-tender/600/300.jpg" alt="Lombo suíno">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">kebab_dining</i>
+                            Lombo Suíno
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">restaurant</i>
+                            <p class="feature-text">Carne <span class="highlight">magra</span></p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">thumb_up</i>
+                            <p class="feature-text">Textura <span class="highlight">macia</span></p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <p class="tip-text">Cortar em bifes médios, temperar com ervas. Servir com chutney de abacaxi.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/brazilian-sausage-linguica-bbq-grilled/600/300.jpg" alt="Linguiças">
+                        </div>
+                        <div class="card-title">
+                            <i class="material-icons">lunch_dining</i>
+                            Linguiças
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">category</i>
+                            <p class="feature-text"><span class="highlight">Variedade</span> de tipos</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">local_fire_department</i>
+                            <p class="feature-text">Sabor <span class="highlight">intenso</span></p>
+                        </div>
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">outdoor_grill</i>
+                                Preparo
+                            </div>
+                            <p class="tip-text">Furar a pele para não estourar. Grelhar lentamente até dourar. Servir com pão ou vinagrete.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Acompanhamentos - Pão de Alho e Vinagrete -->
+        <div class="slide" id="slide-18">
+            <div class="header">
+                <h1 class="title">Acompanhamentos - Pão de Alho e Vinagrete</h1>
+            </div>
+            <div class="content">
+                <div class="comparison">
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Pão de Alho</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/garlic-bread-bbq-grilled-brazilian-style/600/300.jpg" alt="Pão de alho na grelha">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">restaurant</i>
+                            <p class="feature-text">
+                                <strong>Ingredientes</strong><br>
+                                Pão francês, manteiga, alho amassado, cheiro-verde, queijo ralado
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">local_fire_department</i>
+                            <p class="feature-text">
+                                <strong>Preparo</strong><br>
+                                Misturar manteiga com alho e temperos, passar no pão e levar à grelha
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">timer</i>
+                            <p class="feature-text">
+                                <strong>Tempo</strong><br>
+                                5-7 minutos na grelha até dourar
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">auto_awesome</i>
+                                Variações
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">egg</i>
+                                    <p class="tip-text">Com requeijão</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">kebab_dining</i>
+                                    <p class="tip-text">Com bacon</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">local_pizza</i>
+                                    <p class="tip-text">Com queijo</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">spa</i>
+                                    <p class="tip-text">Com ervas finas</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas
+                            </div>
+                            <div class="steps-list">
+                                <div class="step-item">
+                                    <i class="material-icons step-icon">check_circle</i>
+                                    <p class="step-text">Use pão do dia anterior para ficar mais crocante</p>
+                                </div>
+                                <div class="step-item">
+                                    <i class="material-icons step-icon">check_circle</i>
+                                    <p class="step-text">Grelhe em fogo médio para queimar por fora e manter macio por dentro</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-column">
+                        <h2 class="comparison-title">Vinagrete</h2>
+                        <div class="image-container">
+                            <img src="https://picsum.photos/seed/vinagrete-brazilian-salsa-tomato-onion/600/300.jpg" alt="Vinagrete bem preparado">
+                        </div>
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">restaurant</i>
+                            <p class="feature-text">
+                                <strong>Ingredientes</strong><br>
+                                Tomate, cebola, pimentão, vinagre, azeite, sal, cheiro-verde
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">content_cut</i>
+                            <p class="feature-text">
+                                <strong>Técnica</strong><br>
+                                Cortar ingredientes em cubos pequenos e uniformes
+                            </p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="material-icons feature-icon">schedule</i>
+                            <p class="feature-text">
+                                <strong>Descanso</strong><br>
+                                Deixar marinar por 30 minutos antes de servir
+                            </p>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">auto_awesome</i>
+                                Variações
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">spa</i>
+                                    <p class="tip-text">Com ervas finas</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">grain</i>
+                                    <p class="tip-text">Com mostarda</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">water_drop</i>
+                                    <p class="tip-text">Com limão</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">emoji_food_beverage</i>
+                                    <p class="tip-text">Com pimenta</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas
+                            </div>
+                            <div class="steps-list">
+                                <div class="step-item">
+                                    <i class="material-icons step-icon">check_circle</i>
+                                    <p class="step-text">Retire as sementes do tomate para não deixar o vinagrete aguado</p>
+                                </div>
+                                <div class="step-item">
+                                    <i class="material-icons step-icon">check_circle</i>
+                                    <p class="step-text">Deixe a cebola de molho em água com sal por 10 minutos para tirar o ardor</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Acompanhamentos - Farofas e Saladas -->
+        <div class="slide" id="slide-19">
+            <div class="header">
+                <h1 class="title">Acompanhamentos - Farofas e Saladas</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <h2 class="comparison-title">Farofas</h2>
+                        <div class="grid">
+                            <div class="card">
+                                <div class="card-title">
+                                    <i class="material-icons">egg</i>
+                                    Farofa de Ovos
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> farinha de mandioca, ovos, cebola, manteiga
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">local_fire_department</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Preparo:</span> ovos mexidos com farinha torrada
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">
+                                    <i class="material-icons">kebab_dining</i>
+                                    Farofa de Bacon
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> farinha, bacon crocante, cebola, alho
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">whatshot</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Dica:</span> bacon bem frito para textura crocante
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">
+                                    <i class="material-icons">breakfast_dining</i>
+                                    Farofa de Banana
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> banana-da-terra, farinha, manteiga
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">thumb_up</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Combina:</span> carnes salgadas como costela e linguiça
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas para Farofa Perfeita
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Toste a farinha antes de usar</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Use manteiga para sabor mais rico</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Prepare na hora para manter crocante</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Equilibre sal e temperos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <h2 class="comparison-title">Saladas</h2>
+                        <div class="grid">
+                            <div class="card">
+                                <div class="card-title">
+                                    <i class="material-icons">spa</i>
+                                    Salada de Folhas
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Folhas ideais:</span> alface, rúcula, agrião
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">opacity</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Molho:</span> limão, azeite, sal, ervas
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">
+                                    <i class="material-icons">restaurant_menu</i>
+                                    Salpicão
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> frango desfiado, legumes, maçã
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">texture</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Textura:</span> crocante com batata palha
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">
+                                    <i class="material-icons">lunch_dining</i>
+                                    Maionese de Batata
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> batatas, maionese, ervilha, cenoura
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">ac_unit</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Servir:</span> gelada, com cebolinha fresca
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas para Saladas Perfeitas
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Lave bem os vegetais</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Corte em tamanhos uniformes</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Tempere na hora de servir</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Mantenha refrigeradas até servir</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Molhos e Linguiças -->
+        <div class="slide" id="slide-20">
+            <div class="header">
+                <h1 class="title">Molhos e Linguiças</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <h2 class="comparison-title">Molhos</h2>
+                        <div class="grid">
+                            <div class="card">
+                                <div class="image-container">
+                                    <img src="https://picsum.photos/seed/bbq-sauce-barbecue-meat-sauce/600/300.jpg" alt="Molho barbecue">
+                                </div>
+                                <div class="card-title">
+                                    <i class="material-icons">restaurant</i>
+                                    Barbecue
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> ketchup, vinagre, açúcar mascavo, defumado
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">whatshot</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Equilíbrio:</span> doce e defumado
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="image-container">
+                                    <img src="https://picsum.photos/seed/chimichurri-sauce-herbs-garlic/600/300.jpg" alt="Chimichurri">
+                                </div>
+                                <div class="card-title">
+                                    <i class="material-icons">eco</i>
+                                    Chimichurri
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> salsa, orégano, alho, azeite, vinagre
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">public</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Variações:</span> brasileira (mais suave) e argentina (mais picante)
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="image-container">
+                                    <img src="https://picsum.photos/seed/garlic-sauce-creamy-white/600/300.jpg" alt="Molho de alho">
+                                </div>
+                                <div class="card-title">
+                                    <i class="material-icons">spa</i>
+                                    Molho de Alho
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> alho, maionese, limão, azeite
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">opacity</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Técnica:</span> deixar o alho de molho para suavizar
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas para Molhos Perfeitos
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Prepare com antecedência para realçar sabores</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Use ervas frescas para mais aroma</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Ajuste sal e acidez antes de servir</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Sirva em recipientes adequados</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <h2 class="comparison-title">Linguiças</h2>
+                        <div class="grid">
+                            <div class="card">
+                                <div class="image-container">
+                                    <img src="https://picsum.photos/seed/linguica-toscana-brazilian-sausage/600/300.jpg" alt="Linguiça toscana">
+                                </div>
+                                <div class="card-title">
+                                    <i class="material-icons">whatshot</i>
+                                    Linguiça Toscana
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Características:</span> mais apimentada, sabor marcante
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">local_fire_department</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Cozimento:</span> furar a pele, grelhar lentamente
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="image-container">
+                                    <img src="https://picsum.photos/seed/linguica-cuiabana-cheese-brazilian-sausage/600/300.jpg" alt="Linguiça cuiabana">
+                                </div>
+                                <div class="card-title">
+                                    <i class="material-icons">stars</i>
+                                    Linguiça Cuiabana
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Ingredientes:</span> carne, leite, ervas, pimentas, queijo
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">public</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Origem:</span> receita mato-grossense
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="image-container">
+                                    <img src="https://picsum.photos/seed/calabresa-sausage-pepperoni-brazilian/600/300.jpg" alt="Linguiça calabresa">
+                                </div>
+                                <div class="card-title">
+                                    <i class="material-icons">local_fire_department</i>
+                                    Linguiça Calabresa
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">restaurant_menu</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Características:</span> defumada, com pimenta calabresa
+                                    </p>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="material-icons feature-icon">thumb_up</i>
+                                    <p class="feature-text">
+                                        <span class="highlight">Combina:</span> com pão de alho e vinagrete
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-card">
+                            <div class="tips-title">
+                                <i class="material-icons">lightbulb</i>
+                                Dicas para Linguiças Perfeitas
+                            </div>
+                            <div class="tips-grid">
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Fure a pele para não estourar</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Grelhe em fogo médio</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Vire várias vezes para cozinhar por igual</p>
+                                </div>
+                                <div class="tip-item">
+                                    <i class="material-icons tip-icon">check_circle</i>
+                                    <p class="tip-text">Corte em rodelas na hora de servir</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Dicas Finais e Próximos Passos -->
+        <div class="slide" id="slide-21">
+            <div class="header">
+                <h1 class="title">Dicas Finais e Próximos Passos</h1>
+            </div>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">lightbulb</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Dicas para um Churrasco Perfeito</strong><br>
+                                • <span class="highlight">Planejamento</span> antecipado<br>
+                                • <span class="highlight">Organização</span> dos utensílios<br>
+                                • <span class="highlight">Controle</span> do braseiro<br>
+                                • <span class="highlight">Tempo</span> de preparo adequado<br>
+                                • <span class="highlight">Qualidade</span> das carnes<br>
+                                • <span class="highlight">Ambiente</span> descontraído
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">error</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Erros Comuns a Evitar</strong><br>
+                                <div class="errors-list">
+                                    <div class="error-tag">
+                                        <i class="material-icons">block</i>
+                                        Excesso de sal
+                                    </div>
+                                    <div class="error-tag">
+                                        <i class="material-icons">block</i>
+                                        Carne muito perto do fogo
+                                    </div>
+                                    <div class="error-tag">
+                                        <i class="material-icons">block</i>
+                                        Virar a carne muitas vezes
+                                    </div>
+                                    <div class="error-tag">
+                                        <i class="material-icons">block</i>
+                                        Cortar a carne antes do descanso
+                                    </div>
+                                    <div class="error-tag">
+                                        <i class="material-icons">block</i>
+                                        Braseiro não formado
+                                    </div>
+                                    <div class="error-tag">
+                                        <i class="material-icons">block</i>
+                                        Temperar com antecedência
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">restaurant_menu</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Como Montar uma Churrasqueira Completa</strong><br>
+                                • <span class="highlight">Carnes</span> variadas (bovina, suína, frango)<br>
+                                • <span class="highlight">Acompanhamentos</span> (pão de alho, vinagrete)<br>
+                                • <span class="highlight">Saladas</span> e farofas<br>
+                                • <span class="highlight">Bebidas</span> (cerveja, refrigerante, caipirinha)<br>
+                                • <span class="highlight">Equipamentos</span> completos e organizados<br>
+                                • <span class="highlight">Ambiente</span> agradável e acolhedor
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">menu_book</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Sugestões de Cardápios</strong><br>
+                                <div class="menu-grid">
+                                    <div class="menu-card">
+                                        <h3 class="menu-title">Churrasco Rápido</h3>
+                                        <p class="menu-items">
+                                            • Picanha<br>
+                                            • Linguiça toscana<br>
+                                            • Pão de alho<br>
+                                            • Vinagrete
+                                        </p>
+                                    </div>
+                                    <div class="menu-card">
+                                        <h3 class="menu-title">Churrasco Elaborado</h3>
+                                        <p class="menu-items">
+                                            • Picanha<br>
+                                            • Costela<br>
+                                            • Contrafilé<br>
+                                            • Coração de frango<br>
+                                            • Acompanhamentos variados
+                                        </p>
+                                    </div>
+                                    <div class="menu-card">
+                                        <h3 class="menu-title">Para Muitas Pessoas</h3>
+                                        <p class="menu-items">
+                                            • Maminha<br>
+                                            • Alcatra<br>
+                                            • Fraldinha<br>
+                                            • Asinhas de frango<br>
+                                            • Saladas e farofas
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i class="material-icons">trending_up</i>
+                            </div>
+                            <div class="list-text">
+                                <strong>Próximos Passos</strong><br>
+                                <div class="steps-list">
+                                    <div class="step-item">
+                                        <div class="step-number">1</div>
+                                        <p class="step-text"><span class="highlight">Prática contínua</span> das técnicas aprendidas</p>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">2</div>
+                                        <p class="step-text"><span class="highlight">Experimentação</span> de novos cortes e temperos</p>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">3</div>
+                                        <p class="step-text"><span class="highlight">Compartilhamento</span> de experiências com outros churrasqueiros</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegação -->
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">
+                <i class="material-icons">arrow_back</i>
+                Anterior
+            </button>
+            <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">
+                Próximo
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </div>
+
+        <!-- Indicador de slide -->
+        <div class="slide-indicator">
+            Slide <span id="current-slide">1</span> de 21
+        </div>
+
+        <!-- Botão de sumário -->
+        <button class="toc-toggle" onclick="toggleTOC()">
+            <i class="material-icons">menu</i>
+        </button>
+
+        <!-- Sumário -->
+        <div class="toc" id="toc">
+            <div class="toc-title">Sumário</div>
+            <div class="toc-item active" onclick="goToSlide(1)">Capa</div>
+            <div class="toc-item" onclick="goToSlide(2)">Estrutura do Curso</div>
+            <div class="toc-item" onclick="goToSlide(3)">O que você vai aprender</div>
+            <div class="toc-item" onclick="goToSlide(4)">História do Churrasco Brasileiro</div>
+            <div class="toc-item" onclick="goToSlide(5)">Tradições e Cultura do Churrasco</div>
+            <div class="toc-item" onclick="goToSlide(6)">Equipamentos Essenciais - Parte 1</div>
+            <div class="toc-item" onclick="goToSlide(7)">Equipamentos Essenciais - Parte 2</div>
+            <div class="toc-item" onclick="goToSlide(8)">Tipos de Churrasqueiras</div>
+            <div class="toc-item" onclick="goToSlide(9)">Técnicas de Preparo - Controle do Fogo</div>
+            <div class="toc-item" onclick="goToSlide(10)">Técnicas de Preparo - Assar vs Grelhar</div>
+            <div class="toc-item" onclick="goToSlide(11)">Técnicas de Preparo - Selamento da Carne</div>
+            <div class="toc-item" onclick="goToSlide(12)">Técnicas de Preparo - Uso do Sal</div>
+            <div class="toc-item" onclick="goToSlide(13)">Cortes de Carne - Picanha</div>
+            <div class="toc-item" onclick="goToSlide(14)">Cortes de Carne - Costela</div>
+            <div class="toc-item" onclick="goToSlide(15)">Cortes de Carne - Fraldinha e Alcatra</div>
+            <div class="toc-item" onclick="goToSlide(16)">Cortes de Carne - Maminha e Contrafilé</div>
+            <div class="toc-item" onclick="goToSlide(17)">Outros Cortes e Aves</div>
+            <div class="toc-item" onclick="goToSlide(18)">Acompanhamentos - Pão de Alho e Vinagrete</div>
+            <div class="toc-item" onclick="goToSlide(19)">Acompanhamentos - Farofas e Saladas</div>
+            <div class="toc-item" onclick="goToSlide(20)">Molhos e Linguiças</div>
+            <div class="toc-item" onclick="goToSlide(21)">Dicas Finais e Próximos Passos</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 21;
+
+        function showSlide(n) {
+            // Esconde todos os slides
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Mostra o slide atual
+            const currentSlideElement = document.getElementById(`slide-${n}`);
+            if (currentSlideElement) {
+                currentSlideElement.classList.add('active');
+            }
+            
+            // Atualiza o indicador de slide
+            document.getElementById('current-slide').textContent = n;
+            
+            // Atualiza o item do sumário
+            const tocItems = document.querySelectorAll('.toc-item');
+            tocItems.forEach((item, index) => {
+                if (index + 1 === n) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Atualiza os botões de navegação
+            document.getElementById('prev-btn').disabled = n === 1;
+            document.getElementById('next-btn').disabled = n === totalSlides;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+            toggleTOC(); // Fecha o sumário após selecionar um slide
+        }
+
+        function toggleTOC() {
+            const toc = document.getElementById('toc');
+            if (toc.style.display === 'flex') {
+                toc.style.display = 'none';
+            } else {
+                toc.style.display = 'flex';
+            }
+        }
+
+        // Teclado de navegação
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeSlide(1);
+            } else if (e.key === 'Escape') {
+                const toc = document.getElementById('toc');
+                toc.style.display = 'none';
+            }
+        });
+
+        // Inicialização
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
